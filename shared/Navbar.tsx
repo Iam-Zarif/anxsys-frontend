@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { memo, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { FiCalendar, FiArrowRight, FiChevronDown, FiMenu, FiX } from "react-icons/fi";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { FiArrowRight, FiChevronDown, FiMenu, FiX } from "react-icons/fi";
 
-const CalendarIcon = memo(FiCalendar);
 const ArrowIcon = memo(FiArrowRight);
 const ChevronDown = memo(FiChevronDown);
 const MenuIcon = memo(FiMenu);
@@ -30,7 +30,7 @@ const navItems = [
     ],
   },
   { label: "Products", href: "/products" },
-  { label: "Technology Stack", href: "/stack" },
+  { label: "Technology Stack", href: "/services/stack" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Careers", href: "/careers" },
@@ -38,33 +38,57 @@ const navItems = [
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { scrollY } = useScroll();
+
   const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
+  /* Detect screen size for responsive animations */
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024); // lg breakpoint
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
+  /* HERO-AWARE SCROLL ANIMATION - Adjusted for responsiveness */
+  const maxWidth = useTransform(
+    scrollY,
+    [0, 600],
+    isLargeScreen ? ["100%", "65rem"] : ["100%", "100%"], // 1280px = 80rem; full width on mobile
+  );
+  const borderRadius = useTransform(
+    scrollY,
+    [0, 600],
+    isLargeScreen ? ["0px", "9999px"] : ["0px", "0px"],
+  );
+  const marginTop = useTransform(
+    scrollY,
+    [0, 600],
+    isLargeScreen ? ["0rem", ".5rem"] : ["0rem", "0rem"],
+  );
+  const boxShadow = useTransform(
+    scrollY,
+    [0, 500],
+    ["0 0 0 rgba(0,0,0,0)", "0 20px 40px rgba(0,0,0,0.15)"],
+  );
+  const paddingX = useTransform(
+    scrollY,
+    [0, 400],
+    isLargeScreen ? ["2rem", "1.5rem"] : ["0rem", "0rem"], // Reduced padding values for realism; none on mobile to rely on inner px
+  );
+
+  /* Prevent body scroll when mobile menu open */
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : previousOverflow;
+
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = previousOverflow;
     };
   }, [mobileMenuOpen]);
 
@@ -75,37 +99,38 @@ const Navbar = () => {
 
   return (
     <>
-      <header
-        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-          isScrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg"
-            : "bg-white shadow-sm"
-        }`}
+      {/* Animated Navbar */}
+      <motion.header
+        style={{
+          width: maxWidth,
+          maxWidth: "100vw", // Prevent overflow on smaller screens
+          borderRadius,
+          marginTop,
+          boxShadow,
+          left: "50%",
+          translateX: "-50%",
+          paddingLeft: paddingX,
+          paddingRight: paddingX,
+        }}
+        className="fixed top-0 z-50 bg-white/95 backdrop-blur-md transition-colors"
       >
-        <div
-          className={`mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 transition-all duration-500 ${
-            isScrolled ? "py-3" : "py-4"
-          }`}
-        >
+        <div className="mx-auto flex max-w-7xl justify-between items-center px-4 sm:px-6 lg:px-8 py-2">
           {/* Logo */}
           <Link
             href="/"
-            className={`flex items-center cursor-pointer transition-transform duration-300 hover:scale-105 ${
-              isScrolled ? "scale-90" : "scale-100"
-            }`}
             onClick={closeMobileMenu}
+            className="flex items-center transition-transform hover:scale-105"
           >
             <Image
               src="/logo.svg"
               alt="Logo"
-              width={isScrolled ? 100 : 120}
-              height={isScrolled ? 33 : 40}
+              width={120}
+              height={40}
               priority
-              className="transition-all duration-500"
             />
           </Link>
 
-          {/* Desktop Navigation Items */}
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-8">
             {navItems.map(({ label, href, dropdown }) => {
               const isActive = pathname === href;
@@ -114,77 +139,42 @@ const Navbar = () => {
                 return (
                   <div
                     key={label}
-                    className="relative group"
+                    className="relative"
                     onMouseEnter={() => setServicesOpen(true)}
                     onMouseLeave={() => setServicesOpen(false)}
                   >
                     <button
-                      className={`flex items-center gap-1.5 px-2 text-base transition-all duration-300 ${
+                      className={`flex items-center gap-1 font-medium transition text-sm ${
                         isActive
-                          ? "font-bold text-[#0E39FF]"
-                          : "font-medium text-[#181818] hover:text-[#0E39FF] hover:font-semibold"
-                      } cursor-pointer relative`}
+                          ? "text-[#0E39FF] font-semibold"
+                          : "text-[#181818] hover:text-[#0E39FF]"
+                      }`}
                     >
                       {label}
                       <ChevronDown
-                        className={`text-base transition-all duration-300 ${
-                          servicesOpen
-                            ? "rotate-180 text-[#0E39FF]"
-                            : "rotate-0 text-[#4B5563]"
-                        }`}
-                      />
-                      {/* Animated underline */}
-                      <span
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#0E39FF] transition-all duration-300 ${
-                          servicesOpen ? "w-full" : "w-0"
+                        className={`transition ${
+                          servicesOpen ? "rotate-180 text-[#0E39FF]" : ""
                         }`}
                       />
                     </button>
 
-                    {/* Dropdown Menu - Grid Layout */}
+                    {/* Dropdown - Made slightly responsive with max-width */}
                     <div
-                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-6 w-[95vw] max-w-[700px] lg:w-[700px] rounded-2xl bg-white border border-[#E5E7EB] overflow-hidden transition-all duration-500 origin-top ${
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-6 w-[700px] max-w-[90vw] rounded-2xl bg-white border shadow-xl transition-all ${
                         servicesOpen
-                          ? "opacity-100 scale-100 translate-y-0 visible"
-                          : "opacity-0 scale-95 -translate-y-4 invisible"
+                          ? "opacity-100 translate-y-0 visible"
+                          : "opacity-0 -translate-y-4 invisible"
                       }`}
-                      style={{
-                        boxShadow: "0 20px 60px rgba(14, 57, 255, 0.15)",
-                        maxHeight: "550px",
-                      }}
                     >
-                      {/* Arrow pointing up */}
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#E5E7EB] rotate-45" />
-
-                      {/* Grid Container */}
-                      <div
-                        className="relative bg-white p-5 grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-y-auto"
-                        style={{ maxHeight: "530px" }}
-                      >
-                        {dropdown.map((item, index) => (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5">
+                        {dropdown.map((item) => (
                           <Link
                             key={item.label}
                             href={item.href}
-                            className="group/item flex items-center justify-between px-6 py-5 text-base text-[#181818] rounded-xl border border-[#E5E7EB] hover:border-[#04C1FC] hover:shadow-md transition-all duration-300 cursor-pointer relative overflow-hidden"
-                            style={{
-                              animationDelay: servicesOpen
-                                ? `${index * 40}ms`
-                                : "0ms",
-                            }}
+                            className="flex items-center justify-between p-4 rounded-xl border hover:border-[#04C1FC] hover:shadow-md transition"
                           >
-                            {/* Gradient background effect on hover */}
-                            <span
-                              className="absolute inset-0 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300"
-                              style={{
-                                background:
-                                  "linear-gradient(135deg, rgba(14, 57, 255, 0.03), rgba(4, 193, 252, 0.05))",
-                              }}
-                            />
-
-                            <span className="relative z-10 font-medium group-hover/item:text-[#0E39FF] group-hover/item:translate-x-1 transition-all duration-300">
-                              {item.label}
-                            </span>
-                            <ArrowIcon className="relative z-10 text-[#9CA3AF] group-hover/item:text-[#04C1FC] group-hover/item:translate-x-1 transition-all duration-300" />
+                            <span>{item.label}</span>
+                            <ArrowIcon className="-rotate-45" />
                           </Link>
                         ))}
                       </div>
@@ -197,59 +187,37 @@ const Navbar = () => {
                 <Link
                   key={label}
                   href={href}
-                  className={`transition-all duration-300 px-2 text-base cursor-pointer relative group ${
+                  className={`font-medium transition text-sm ${
                     isActive
-                      ? "font-bold text-[#0E39FF]"
-                      : "font-medium text-[#181818] hover:text-[#0E39FF] hover:font-semibold"
+                      ? "text-[#0E39FF] font-semibold"
+                      : "text-[#181818] hover:text-[#0E39FF]"
                   }`}
                 >
                   {label}
-                  {/* Animated underline */}
-                  <span
-                    className={`absolute bottom-0 left-0 h-0.5 bg-[#0E39FF] transition-all duration-300 ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  />
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Side: CTA Button & Mobile Menu Toggle */}
+          {/* CTA + Mobile */}
           <div className="flex items-center gap-3">
-            {/* CTA Button */}
-            <div
-              className={`relative inline-block transition-all duration-300 hover:scale-105 rounded-full p-0.5 ${
-                isScrolled ? "scale-95" : "scale-100"
-              }`}
+            <Link
+              href="/book-demo"
+              className="hidden sm:flex items-center gap-2 rounded-full border-2 border-[#0E39FF] px-5 py-2 font-semibold hover:bg-[#0E39FF] hover:text-white transition"
             >
-              <Link
-                href="/book-demo"
-                className="flex items-center gap-2 rounded-full bg-white border-2 border-[#0E39FF] px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-semibold cursor-pointer group relative overflow-hidden"
-                onClick={closeMobileMenu}
-              >
-                <span className="relative z-10 font-semibold group-hover:tracking-wide transition-all duration-300">
-                  <span className="hidden sm:inline">Get a </span>Quote
-                </span>
-                <ArrowIcon className="relative z-10 -rotate-45 size-4 sm:size-5 text-[#0E39FF] group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </div>
+              Get a Quote
+              <ArrowIcon className="-rotate-45" />
+            </Link>
 
-            {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-[#0E39FF]/10 hover:bg-[#0E39FF]/20 transition-all duration-300 cursor-pointer"
-              aria-label="Toggle menu"
+              className="lg:hidden w-10 h-10 rounded-lg bg-[#0E39FF]/10 flex items-center justify-center"
             >
-              {mobileMenuOpen ? (
-                <CloseIcon className="text-[#0E39FF] text-2xl transition-transform duration-300 rotate-90" />
-              ) : (
-                <MenuIcon className="text-[#0E39FF] text-2xl transition-transform duration-300" />
-              )}
+              {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Mobile Menu Sidebar */}
       <div

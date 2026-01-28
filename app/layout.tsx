@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/shared/Navbar";
-
+import Footer from "@/shared/Footer";
 
 export const metadata: Metadata = {
   title: "ANXSYS",
@@ -18,6 +18,7 @@ export default function RootLayout({
       <body className="bg-[#f7f8fc]">
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Code2,
@@ -13,6 +14,7 @@ import {
   ArrowRight,
   CheckCircle2,
   X,
+  type LucideIcon,
 } from "lucide-react";
 
 const colors = {
@@ -36,176 +38,23 @@ const colors = {
   },
 };
 
-const servicesData = [
-  {
-    id: 1,
-    icon: Code2,
-    title: "Custom Software Development",
-    shortDesc:
-      "Tailored software solutions designed to meet your unique business requirements.",
-    description:
-      "We build scalable, robust applications that drive efficiency and innovation. Our expert team uses cutting-edge technologies to create custom solutions that perfectly align with your business goals and processes.",
-    features: [
-      "Enterprise-grade architecture",
-      "Agile development methodology",
-      "Legacy system modernization",
-      "API development & integration",
-      "Microservices architecture",
-      "Performance optimization",
-    ],
-    technologies: ["React", "Node.js", "Python", "Java", ".NET"],
-    benefits: [
-      "Reduced operational costs by 40%",
-      "Faster time-to-market",
-      "Scalable infrastructure",
-      "24/7 technical support",
-    ],
-  },
-  {
-    id: 2,
-    icon: Database,
-    title: "ERP & Business Systems",
-    shortDesc:
-      "Comprehensive ERP solutions that streamline operations and improve productivity.",
-    description:
-      "Our ERP systems provide real-time insights across your entire organization, automating processes and improving decision-making with integrated business intelligence.",
-    features: [
-      "End-to-end ERP implementation",
-      "Business process automation",
-      "Supply chain management",
-      "Custom module development",
-      "Financial management integration",
-      "Inventory & warehouse management",
-    ],
-    technologies: ["SAP", "Oracle", "Odoo", "Microsoft Dynamics"],
-    benefits: [
-      "Centralized data management",
-      "Improved collaboration",
-      "Real-time reporting",
-      "Regulatory compliance",
-    ],
-  },
-  {
-    id: 3,
-    icon: Cloud,
-    title: "SaaS Product Development",
-    shortDesc:
-      "Build and launch scalable SaaS products with multi-tenant architecture.",
-    description:
-      "From concept to market, we help you create successful SaaS products with subscription management, seamless user experiences, and scalable infrastructure.",
-    features: [
-      "Multi-tenant architecture",
-      "Payment gateway integration",
-      "Analytics & reporting dashboards",
-      "Scalable infrastructure design",
-      "User management & authentication",
-      "Automated billing systems",
-    ],
-    technologies: ["AWS", "Stripe", "Auth0", "PostgreSQL"],
-    benefits: [
-      "Recurring revenue model",
-      "Global scalability",
-      "Reduced infrastructure costs",
-      "Rapid feature deployment",
-    ],
-  },
-  {
-    id: 4,
-    icon: Smartphone,
-    title: "Mobile App Development",
-    shortDesc:
-      "Native and cross-platform mobile applications for iOS and Android.",
-    description:
-      "We deliver exceptional mobile experiences that engage users and drive business growth, using the latest frameworks and best practices in mobile development.",
-    features: [
-      "iOS & Android development",
-      "React Native & Flutter",
-      "App Store optimization",
-      "Push notifications & analytics",
-      "Offline functionality",
-      "In-app purchases",
-    ],
-    technologies: ["React Native", "Flutter", "Swift", "Kotlin"],
-    benefits: [
-      "Cross-platform compatibility",
-      "Enhanced user engagement",
-      "Faster development cycles",
-      "App store compliance",
-    ],
-  },
-  {
-    id: 5,
-    icon: Globe,
-    title: "Web Application Development",
-    shortDesc:
-      "Modern, responsive web applications built with cutting-edge technologies.",
-    description:
-      "We create fast, secure, and engaging web experiences that work seamlessly across all devices and browsers, from simple landing pages to complex enterprise applications.",
-    features: [
-      "Progressive Web Apps (PWA)",
-      "Single Page Applications (SPA)",
-      "E-commerce platforms",
-      "Content management systems",
-      "Responsive design",
-      "SEO optimization",
-    ],
-    technologies: ["React", "Vue.js", "Next.js", "TypeScript"],
-    benefits: [
-      "Lightning-fast performance",
-      "Mobile-first design",
-      "Enhanced SEO rankings",
-      "Offline capabilities",
-    ],
-  },
-  {
-    id: 6,
-    icon: Brain,
-    title: "AI & Data Solutions",
-    shortDesc:
-      "Harness the power of AI and machine learning for intelligent automation.",
-    description:
-      "We help you unlock insights, automate processes, and drive intelligent decision-making through advanced AI, machine learning, and data analytics solutions.",
-    features: [
-      "Machine learning models",
-      "Natural language processing",
-      "Predictive analytics",
-      "Computer vision solutions",
-      "Data pipeline automation",
-      "AI-powered chatbots",
-    ],
-    technologies: ["TensorFlow", "PyTorch", "OpenAI", "Python"],
-    benefits: [
-      "Automated decision-making",
-      "Predictive insights",
-      "Reduced manual work",
-      "Competitive advantage",
-    ],
-  },
-  {
-    id: 7,
-    icon: Server,
-    title: "Cloud & DevOps Services",
-    shortDesc:
-      "Cloud migration and DevOps practices for reliability and scalability.",
-    description:
-      "We ensure your infrastructure is optimized for performance, security, and cost-efficiency with modern cloud architecture and automated deployment pipelines.",
-    features: [
-      "AWS, Azure, GCP migration",
-      "CI/CD pipeline setup",
-      "Infrastructure as Code",
-      "Monitoring & optimization",
-      "Container orchestration",
-      "Security & compliance",
-    ],
-    technologies: ["Docker", "Kubernetes", "Terraform", "Jenkins"],
-    benefits: [
-      "99.9% uptime guarantee",
-      "Automated deployments",
-      "Cost optimization",
-      "Enhanced security",
-    ],
-  },
-];
+const iconMap: Record<string, LucideIcon> = {
+  Code2,
+  Database,
+  Cloud,
+  Smartphone,
+  Globe,
+  Brain,
+  Server,
+};
+
+type ServiceType = {
+  title: string;
+  slug: string;
+  icon: string;
+  description: string;
+  features: string[];
+};
 
 const ServiceCard = ({
   service,
@@ -243,7 +92,7 @@ const ServiceCard = ({
     };
   }, [index]);
 
-  const Icon = service.icon;
+  const Icon = iconMap[service.icon];
 
   return (
     <motion.div
@@ -256,9 +105,15 @@ const ServiceCard = ({
       }}
       whileHover={{ y: -12, scale: 1.02 }}
       onClick={() => onClick(service)}
-      className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden cursor-pointer group"
+      className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden cursor-pointer group relative"
       style={{ boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
     >
+      <div
+        className="absolute top-0 left-0 w-full h-full opacity-0 group-hover:opacity-10 transition-opacity"
+        style={{
+          background: `radial-gradient(circle, ${colors.brand.tertiary} 0%, transparent 100%)`,
+        }}
+      />
       <div
         className="h-2"
         style={{
@@ -266,7 +121,7 @@ const ServiceCard = ({
         }}
       />
 
-      <div className="p-8">
+      <div className="p-8 relative z-10">
         <motion.div
           whileHover={{ scale: 1.1, rotate: 5 }}
           transition={{ duration: 0.3 }}
@@ -286,10 +141,10 @@ const ServiceCard = ({
         </h3>
 
         <p
-          className="leading-relaxed mb-6"
+          className="leading-relaxed mb-6 text-sm md:text-base"
           style={{ color: colors.text.secondary }}
         >
-          {service.shortDesc}
+          {service.description}
         </p>
 
         <div className="space-y-3 mb-6">
@@ -338,8 +193,6 @@ const ServiceCard = ({
   );
 };
 
-type ServiceType = (typeof servicesData)[number];
-
 const ServiceDetailModal = ({
   service,
   onClose,
@@ -349,7 +202,7 @@ const ServiceDetailModal = ({
 }) => {
   if (!service) return null;
 
-  const Icon = service.icon;
+  const Icon = iconMap[service.icon];
 
   return (
     <AnimatePresence>
@@ -391,7 +244,7 @@ const ServiceDetailModal = ({
               </div>
               <div>
                 <h2 className="text-3xl font-bold">{service.title}</h2>
-                <p className="text-blue-100 mt-1">{service.shortDesc}</p>
+                <p className="text-blue-100 mt-1">{service.description}</p>
               </div>
             </div>
           </div>
@@ -412,86 +265,30 @@ const ServiceDetailModal = ({
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <h3
-                  className="text-xl font-bold mb-4"
-                  style={{ color: colors.text.primary }}
-                >
-                  Key Features
-                </h3>
-                <div className="space-y-3">
-                  {service.features.map((feature, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="flex items-start gap-3"
-                    >
-                      <CheckCircle2
-                        className="w-5 h-5 flex-shrink-0 mt-0.5"
-                        style={{ color: colors.brand.secondary }}
-                      />
-                      <span style={{ color: colors.text.secondary }}>
-                        {feature}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3
-                  className="text-xl font-bold mb-4"
-                  style={{ color: colors.text.primary }}
-                >
-                  Business Benefits
-                </h3>
-                <div className="space-y-3">
-                  {service.benefits.map((benefit: string, i: number) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="flex items-start gap-3"
-                    >
-                      <CheckCircle2
-                        className="w-5 h-5 flex-shrink-0 mt-0.5"
-                        style={{ color: colors.brand.tertiary }}
-                      />
-                      <span style={{ color: colors.text.secondary }}>
-                        {benefit}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             <div className="mb-8">
               <h3
                 className="text-xl font-bold mb-4"
                 style={{ color: colors.text.primary }}
               >
-                Technologies We Use
+                Key Features
               </h3>
-              <div className="flex flex-wrap gap-3">
-                {service.technologies.map((tech: string, i: number) => (
-                  <motion.span
+              <div className="space-y-3">
+                {service.features.map((feature, i) => (
+                  <motion.div
                     key={i}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="px-4 py-2 rounded-lg text-sm font-semibold"
-                    style={{
-                      backgroundColor: colors.background.gray,
-                      color: colors.brand.primary,
-                    }}
+                    className="flex items-start gap-3"
                   >
-                    {tech}
-                  </motion.span>
+                    <CheckCircle2
+                      className="w-5 h-5 flex-shrink-0 mt-0.5"
+                      style={{ color: colors.brand.secondary }}
+                    />
+                    <span style={{ color: colors.text.secondary }}>
+                      {feature}
+                    </span>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -529,9 +326,23 @@ const ServiceDetailModal = ({
 };
 
 export default function ServicesPage() {
+  const [services, setServices] = useState<ServiceType[]>([]);
   const [selectedService, setSelectedService] = useState<ServiceType | null>(
     null,
   );
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/service`)
+      .then((response) => {
+        if (response.data.success) {
+          setServices(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching services:", error);
+      });
+  }, []);
 
   return (
     <div
@@ -539,7 +350,7 @@ export default function ServicesPage() {
       style={{ backgroundColor: colors.background.light }}
     >
       {/* Services Grid Section */}
-      <section className="py-20 lg:py-28">
+      <section>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -563,10 +374,10 @@ export default function ServicesPage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {servicesData.map((service, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {services.map((service, index) => (
               <ServiceCard
-                key={service.id}
+                key={service.slug}
                 service={service}
                 index={index}
                 onClick={setSelectedService}
