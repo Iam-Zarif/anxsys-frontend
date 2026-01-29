@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Code2, Smartphone, Cloud, Server, Layers, Cpu } from "lucide-react";
 
 import techStackData from "./techStackData.json";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 const tabIconMap: Record<string, any> = {
   frontend: Code2,
@@ -49,23 +50,11 @@ export default function TechStack() {
     <section className="relative overflow-hidden py-16 px-4 sm:px-6 lg:px-8 bg-black/90 bg-linear-to-br from-[#0E39FF]/30 via-[#04C1FC]/20 to-[#31EEDD]/30 mt-16">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-            <span className="text-white bg-clip-text">
-              {techStackData.header.title.highlight}
-            </span>
-            <br />
-            {/* <span className="text-white">
-              {techStackData.header.title.normal}
-            </span> */}
-          </h2>
-        </motion.div>
+        <SectionHeader
+          title="Technology Stack"
+          subtitle="Technologies we trust to build secure, and high-performance solutions."
+          variant="dark"
+        />
 
         {/* Tabs */}
         <div className="flex justify-center flex-wrap gap-3 mb-16">
