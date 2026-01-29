@@ -338,7 +338,7 @@ const Navbar = () => {
               <Link
                 href="/book-demo"
                 onClick={closeMobileMenu}
-                className="flex items-center justify-center gap-2 w-full rounded-xl bg-gradient-to-r from-[#0E39FF] to-[#04C1FC] px-6 py-4 text-base font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+                className="flex items-center justify-center gap-2 w-full rounded-xl bg-linear-to-r from-[#0E39FF] to-[#04C1FC] px-6 py-4 text-base font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
               >
                 <span>Get a Free Quote</span>
                 <ArrowIcon className="-rotate-45 size-5" />
