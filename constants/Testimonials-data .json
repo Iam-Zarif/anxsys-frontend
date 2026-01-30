@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "Sarah Mitchell",
+    "designation": "CTO, TechVision Solutions",
+    "company": "TechVision Solutions",
+    "feedback": "Xpartex delivered a scalable ERP system that improved our operations by 40%. Their team's expertise in enterprise architecture and commitment to our success was exceptional. The implementation was smooth, and the ongoing support has been outstanding.",
+    "rating": 4.5,
+    "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
+  },
+  {
+    "id": 2,
+    "name": "Michael Chen",
+    "designation": "CEO, Global Logistics Inc",
+    "company": "Global Logistics Inc",
+    "feedback": "The custom supply chain management solution from Xpartex transformed how we handle inventory and distribution. Real-time tracking and predictive analytics have reduced our operational costs by 35% and improved delivery times significantly.",
+    "rating": 4,
+    "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"
+  },
+  {
+    "id": 3,
+    "name": "Emily Rodriguez",
+    "designation": "VP of Operations, HealthCare Plus",
+    "company": "HealthCare Plus",
+    "feedback": "Xpartex understood our complex healthcare requirements and delivered a HIPAA-compliant patient management system that exceeded expectations. The platform has streamlined our workflows and improved patient satisfaction scores by 45%.",
+    "rating": 3,
+    "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"
+  },
+  {
+    "id": 4,
+    "name": "David Thompson",
+    "designation": "Director of IT, FinanceHub",
+    "company": "FinanceHub",
+    "feedback": "Working with Xpartex on our financial analytics platform was a game-changer. Their attention to security, scalability, and user experience resulted in a solution that our team loves to use. Data processing speed increased by 60%.",
+    "rating": 5,
+    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+  },
+  {
+    "id": 5,
+    "name": "Lisa Anderson",
+    "designation": "Founder & CEO, RetailNow",
+    "company": "RetailNow",
+    "feedback": "Xpartex built us a comprehensive e-commerce platform that handles millions of transactions seamlessly. Their innovative approach to inventory management and customer engagement has helped us scale from 5 to 50 locations in just 18 months.",
+    "rating": 2,
+    "image": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop"
+  },
+  {
+    "id": 6,
+    "name": "James Kumar",
+    "designation": "COO, Manufacturing Pro",
+    "company": "Manufacturing Pro",
+    "feedback": "The IoT-enabled production monitoring system developed by Xpartex has revolutionized our manufacturing process. Real-time insights and predictive maintenance capabilities reduced downtime by 50% and increased production efficiency remarkably.",
+    "rating": 4,
+    "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"
+  }
+]

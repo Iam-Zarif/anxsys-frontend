@@ -15,10 +15,17 @@ const CloseIcon = memo(FiX);
 
 const navItems = [
   {
+    label: "About Us",
+    href: "/about",
+  },
+  {
     label: "Services",
     href: "/services",
     dropdown: [
-      { label: "Custom Software Development", href: "/services/custom-software" },
+      {
+        label: "Custom Software Development",
+        href: "/services/custom-software",
+      },
       { label: "ERP & Business Systems", href: "/services/erp" },
       { label: "SaaS Product Development", href: "/services/saas" },
       { label: "Mobile App Development", href: "/services/mobile" },
@@ -28,10 +35,9 @@ const navItems = [
     ],
   },
   { label: "Products", href: "/products" },
-  { label: "Technology Stack", href: "/services/stack" },
-  { label: "About Us", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  // { label: "Technology Stack", href: "/services/stack" },
   { label: "Careers", href: "/careers" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
@@ -55,25 +61,25 @@ const Navbar = () => {
   const width = useTransform(
     scrollY,
     [0, 400],
-    isDesktop ? ["100%", "60rem"] : ["100%", "100%"]
+    isDesktop ? ["100%", "50rem"] : ["100%", "100%"],
   );
 
   const radius = useTransform(
     scrollY,
     [0, 400],
-    isDesktop ? ["0px", "9999px"] : ["0px", "0px"]
+    isDesktop ? ["0px", "9999px"] : ["0px", "0px"],
   );
 
   const marginTop = useTransform(
     scrollY,
     [0, 400],
-    isDesktop ? ["0rem", "0.5rem"] : ["0rem", "0rem"]
+    isDesktop ? ["0rem", "0.5rem"] : ["0rem", "0rem"],
   );
 
   const shadow = useTransform(
     scrollY,
     [0, 300],
-    ["0 0 0 rgba(0,0,0,0)", colors.shadow.lg]
+    ["0 0 0 rgba(0,0,0,0)", colors.shadow.lg],
   );
 
   /* Lock body scroll on mobile */
@@ -99,7 +105,13 @@ const Navbar = () => {
         <div className="mx-auto max-w-7xl px-6 lg:px-8 py-2 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="hover:scale-105 transition-transform">
-            <Image src="/logo.svg" alt="Logo" width={120} height={40} priority />
+            <Image
+              src="/logo.svg"
+              alt="Logo"
+              width={120}
+              height={40}
+              priority
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -175,9 +187,7 @@ const Navbar = () => {
                   href={href}
                   className="text-sm font-medium transition"
                   style={{
-                    color: active
-                      ? colors.brand.primary
-                      : colors.text.primary,
+                    color: active ? colors.brand.primary : colors.text.primary,
                   }}
                 >
                   {label}
