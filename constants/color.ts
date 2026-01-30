@@ -29,7 +29,7 @@ export const colors = {
     brand: "linear-gradient(90deg, #0E39FF, #04C1FC, #31EEDD)",
     brandReverse: "linear-gradient(90deg, #31EEDD, #04C1FC, #0E39FF)",
     card: "linear-gradient(135deg, #F9FAFB, #F3F4F6)",
-    darkOverlay: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+    darkOverlay: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
   },
   status: {
     success: "#22C55E",
