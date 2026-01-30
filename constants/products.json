@@ -1,0 +1,90 @@
+ [
+  {
+    "slug": "medical-erp",
+    "title": "Medical ERP System",
+    "bannerImage": "/products/Medical-erp.jpg",
+    "shortDescription": "A comprehensive ERP solution tailored for hospitals and healthcare providers.",
+    "solution": "Our Medical ERP System streamlines hospital operations by integrating patient management, billing, inventory, and reporting into a secure, unified platform.",
+    "features": [
+      "Advanced Patient & Appointment Management",
+      "Seamless Billing & Insurance Processing",
+      "Efficient Pharmacy & Inventory Control",
+      "Comprehensive Doctor & Staff Management",
+      "Interactive Reports & Analytics Dashboard"
+    ],
+    "benefits": [
+      "Accelerated hospital operations",
+      "Minimized manual errors",
+      "Secure centralized data access",
+      "Enhanced patient experience"
+    ],
+    "longDescription": "This ERP transforms traditional healthcare management into a digital powerhouse, ensuring compliance and scalability.",
+    "tags": ["healthcare", "erp", "hospital"]
+  },
+  {
+    "slug": "clinic-diagnostic",
+    "title": "Clinic & Diagnostic Center Management",
+    "bannerImage": "/products/clinic-system.avif",
+    "shortDescription": "Intelligent software designed for clinics and diagnostic centers.",
+    "solution": "This platform optimizes clinic workflows by handling appointments, lab tests, reports, billing, and patient records with precision.",
+    "features": [
+      "User-Friendly Online Appointment Booking",
+      "Robust Lab Test Management",
+      "Automated Digital Report Generation",
+      "Flexible Doctor Scheduling",
+      "Integrated Billing & Payment Systems"
+    ],
+    "benefits": [
+      "Streamlined workflow efficiency",
+      "Precise diagnostic accuracy",
+      "Rapid report delivery",
+      "Superior patient satisfaction"
+    ],
+    "longDescription": "Empower your clinic with tools that reduce wait times and improve diagnostic reliability.",
+    "tags": ["clinic", "diagnostic", "healthtech"]
+  },
+  {
+    "slug": "live-mcq-exam",
+    "title": "Live MCQ Exam System",
+    "bannerImage": "/products/Live-mcq.jpg",
+    "shortDescription": "Secure real-time online examination platform.",
+    "solution": "A robust live MCQ exam system for educational institutions, featuring real-time monitoring, analytics, and secure administration.",
+    "features": [
+      "Real-Time Exam Monitoring",
+      "Dynamic Question Bank Management",
+      "Instant Auto Result Publishing",
+      "Detailed Student Performance Analytics",
+      "Fortified Secure Login System"
+    ],
+    "benefits": [
+      "Highly scalable online assessments",
+      "Immediate result feedback",
+      "Eliminated paper usage costs",
+      "Convenient remote accessibility"
+    ],
+    "longDescription": "Revolutionize education with a platform that supports hybrid learning environments securely.",
+    "tags": ["education", "exam", "online"]
+  },
+  {
+    "slug": "lc-automation",
+    "title": "LC Automation System",
+    "bannerImage": "/products/lc-automation-system.avif",
+    "shortDescription": "Efficient automation for LC and trade finance.",
+    "solution": "The LC Automation System automates trade finance by simplifying LC creation, tracking, approvals, and document handling.",
+    "features": [
+      "Intuitive LC Creation & Tracking",
+      "Streamlined Automated Approval Workflow",
+      "Secure Document Management",
+      "Built-in Compliance Checking",
+      "Comprehensive Audit-Ready Reports"
+    ],
+    "benefits": [
+      "Expedited LC processing",
+      "Lowered operational risks",
+      "Enhanced regulatory compliance",
+      "Increased process transparency"
+    ],
+    "longDescription": "Designed for global trade, this system ensures speed and security in financial operations.",
+    "tags": ["finance", "trade", "automation"]
+  }
+]
