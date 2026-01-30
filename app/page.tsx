@@ -7,13 +7,13 @@ import TestimonialsCarouselAlt from "@/components/home/Testimonial/TestimonialsC
 
 export default function Page() {
   return (
-    <div>
+    <>
       <Hero />
       <ServicesPage />
       <WhyChooseUsMinimal />
       <TechStack />
       <Portfolio />
       <TestimonialsCarouselAlt />
-    </div>
+    </>
   );
 }
